@@ -21,7 +21,9 @@ public class PhoneDao {
 	private ResultSet rs = null;
 	
 	private int count=0;
-	
+	private String allSelectQuery = "select person_id, name, hp, company from person";
+	private String searchWord=null;
+
 	//생성자
 	
 	//메소드 -getter/setter
@@ -67,14 +69,33 @@ public class PhoneDao {
 		
 		try {	
 			// 3. SQL문 준비 / 바인딩 / 실행
+			/*
 			String query = "";
 			query += " select	person_id,";
 			query += "			name,";
 			query += "			hp,";
 			query += "			company";
 			query += " from person";
-
-			pstmt = conn.prepareStatement(query);
+			*/
+			//검색 개선
+			if(searchWord != null) {
+				
+				String query = allSelectQuery;
+				query += " where name like ?";
+				query += " or hp like ?";
+				query += " or company like ?";
+				
+				pstmt = conn.prepareStatement(query);
+				
+				pstmt.setString(1, searchWord);
+				pstmt.setString(2, searchWord);
+				pstmt.setString(3, searchWord);
+				
+				searchWord = null;
+				
+			}else {
+				pstmt = conn.prepareStatement(allSelectQuery);
+			}
 			
 			rs = pstmt.executeQuery();
 	        
@@ -92,7 +113,7 @@ public class PhoneDao {
 		} catch (SQLException e) {
 		    System.out.println("error:" + e);
 		} 
-
+		
 		resourceClose();
 		
 		return phoneVoList;
@@ -191,6 +212,15 @@ public class PhoneDao {
 		return count;
 	}
 
+	//검색 개선 - getPersonList활용
+	public List<PhoneVo> phoneSearch(String searchWord) {	
+		
+		this.searchWord = "%" + searchWord + "%";
+		
+		return getPersonList();
+	}
+
+	/* 개선전 검색기능
 	public List<PhoneVo> phoneSearch(String searchWord) {
 		
 		List<PhoneVo> phoneVoList = new ArrayList<PhoneVo>();
@@ -238,4 +268,5 @@ public class PhoneDao {
 		
 		return phoneVoList;
 	}
+	*/
 }
