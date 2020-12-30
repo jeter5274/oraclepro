@@ -77,6 +77,7 @@ public class PhoneDao {
 			query += "			company";
 			query += " from person";
 			*/
+			
 			//검색 개선
 			if(searchWord != null) {
 				
@@ -84,6 +85,7 @@ public class PhoneDao {
 				query += " where name like ?";
 				query += " or hp like ?";
 				query += " or company like ?";
+				query += " order by person_id asc";
 				
 				pstmt = conn.prepareStatement(query);
 				
@@ -94,7 +96,11 @@ public class PhoneDao {
 				searchWord = null;
 				
 			}else {
-				pstmt = conn.prepareStatement(allSelectQuery);
+				
+				String query = allSelectQuery;
+				query += " order by person_id asc";
+				
+				pstmt = conn.prepareStatement(query);
 			}
 			
 			rs = pstmt.executeQuery();
