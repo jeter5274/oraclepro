@@ -3,9 +3,6 @@ package com.javaex.phone2;
 import java.util.List;
 import java.util.Scanner;
 
-import com.javaex.phone.PhoneDao;
-import com.javaex.phone.PhoneVo;
-
 public class PhoneExcute {
 
 	//필드	
