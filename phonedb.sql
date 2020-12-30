@@ -57,4 +57,5 @@ select  person_id,
 from person
 where name like '%3%'
 or hp like '%3%'
-or company like '%3%';
+or company like '%3%'
+order by person_id;
