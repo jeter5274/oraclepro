@@ -21,8 +21,8 @@ public class PhoneDao {
 	private ResultSet rs = null;
 	
 	private int count=0;
-	private String allSelectQuery = "select person_id, name, hp, company from person";
-	private String searchWord=null;
+	//private String allSelectQuery = "select person_id, name, hp, company from person"; //검색을 select와 합치면서 삭제
+	//private String searchWord=null; //검색을 select와 합치면서 삭제
 
 	//생성자
 	
@@ -61,7 +61,7 @@ public class PhoneDao {
 	    }
 	}
 	
-	public List<PhoneVo> getPersonList() {
+	public List<PhoneVo> getPersonList(String searchWord) {
 		
 		List<PhoneVo> phoneVoList = new ArrayList<PhoneVo>();
 		
@@ -69,18 +69,20 @@ public class PhoneDao {
 		
 		try {	
 			// 3. SQL문 준비 / 바인딩 / 실행
-			/*
 			String query = "";
 			query += " select	person_id,";
 			query += "			name,";
 			query += "			hp,";
 			query += "			company";
 			query += " from person";
-			*/
-			//검색 개선
-			if(searchWord != null) {
+
+			if("all".equals(searchWord)) {
+				query += " order by person_id asc";
 				
-				String query = allSelectQuery;
+				pstmt = conn.prepareStatement(query);
+				
+			}else {
+				
 				query += " where name like ?";
 				query += " or hp like ?";
 				query += " or company like ?";
@@ -88,18 +90,12 @@ public class PhoneDao {
 				
 				pstmt = conn.prepareStatement(query);
 				
+				searchWord = "%" + searchWord + "%";
+				
 				pstmt.setString(1, searchWord);
 				pstmt.setString(2, searchWord);
 				pstmt.setString(3, searchWord);
 				
-				searchWord = null;
-				
-			}else {
-				
-				String query = allSelectQuery;
-				query += " order by person_id asc";
-				
-				pstmt = conn.prepareStatement(query);
 			}
 			
 			rs = pstmt.executeQuery();
@@ -217,6 +213,7 @@ public class PhoneDao {
 		return count;
 	}
 
+	/* getPersonList와 합침
 	//검색 개선 - getPersonList활용
 	public List<PhoneVo> phoneSearch(String searchWord) {	
 		
@@ -224,7 +221,8 @@ public class PhoneDao {
 		
 		return getPersonList();
 	}
-
+	*/
+	
 	/* 개선전 검색기능
 	public List<PhoneVo> phoneSearch(String searchWord) {
 		

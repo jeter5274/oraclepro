@@ -35,7 +35,7 @@ public class PhoneExcute {
 	
 	//전체 리스트 출력
 	public void showList() {
-		printList(phoneDao.getPersonList());
+		printList(phoneDao.getPersonList("all"));
 	}
 	
 	//연락처 추가
@@ -62,7 +62,7 @@ public class PhoneExcute {
 		sc.nextLine(); //개행문자 추가 : 정수형 입력 후 문자형 오류 해결
 		String searchWord = strScan("검색어");
 		
-		printList(phoneDao.phoneSearch(searchWord));
+		printList(phoneDao.getPersonList(searchWord));
 	}
 	
 	//리스트 출력
